@@ -41,18 +41,13 @@ template<class T> void chmax(T &t, T f) { if (t < f) t = f; }
 
 
 const int INF = (1<<30);
-LL res;
+int res;
 int h, w;
-int tab[105][105];
+int tab[110][110];
 
 void dfs(int x, int y){
     if(x == h){
         res++;
-        REP(i, h) REP(j, w){
-            cout << tab[i][j] << " ";
-            if(j == w-1) cout << endl;
-        }
-        cout << endl;
         return;
     }
     
@@ -71,13 +66,25 @@ void init() {
 
 void input() {
     cin >> h >> w;
+    if(h > w) swap(h, w);
     res = 0;
-    MSET(tab, -1);
 }
 
 void solve() {
-    dfs(0, 0);
-    cout << res << endl;
+    if(h <= 100 && w <= 100){
+        dfs(0, 0);
+        cout << res << endl;
+        return;
+    }
+    else if(h == 1){
+        int ans[4] = {10, 9, 8, 9};
+        cout << ans[w%4] << endl;
+    }
+    else{
+        int ans[4] = {18, 20, 18, 16};
+        cout << ans[(h+w)%4] << endl;
+    }
+    
 }
 
 int main() {

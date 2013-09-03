@@ -38,7 +38,7 @@ template<class T> void chmax(T &t, T f) { if (t < f) t = f; }
 #define present(c, e) ((c).find((e)) != (c).end())
 #define cpresent(c, e) (find(all(c), (e)) != (c).end())
 
-double INF = 1e9;
+double INF = 1e30;
 double EPS = 1e-10;
 
 typedef pair<double, int> P;

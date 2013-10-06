@@ -73,14 +73,20 @@ void solve() {
     int im = 0;
     FIT(it, ss) ms[*it] = im++;
     
+    bool done[210][210];
+    MSET(done, false);
+    REP(i, N) done[i][i] = true;
+    
     MSET(g, 0);
     REP(i, N) g[i][i] = 1.0;
     REP(i, n){
         g[ms[l[i]]][ms[s[i]]] = m[i];
         g[ms[s[i]]][ms[l[i]]] = (1.0/m[i]);
+        done[ms[l[i]]][ms[s[i]]] = true;
+        done[ms[s[i]]][ms[l[i]]] = true;
     }
 //    REP(k, N) REP(i, N) REP(j, N) if(g[i][j] == 0 && g[i][k] > 0 && g[k][j] > 0) g[i][j] = g[i][k] * g[k][j];
-    REP(k, N) REP(i, N) REP(j, N) if(g[i][k] > 0 && g[k][j] > 0) chmax(g[i][j], g[i][k] * g[k][j]);
+    REP(k, N) REP(i, N) REP(j, N) if(done[i][k] && done[k][j]) g[i][j] = g[i][k] * g[k][j], done[i][j] = true;
     
     int root;
     string root_s;

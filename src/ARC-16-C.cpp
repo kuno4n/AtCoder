@@ -47,11 +47,11 @@ int cost[4];
 
 
 
-bool chk(){
-    bool ok = true;
-    REP(i, m) ok &= (c[i] == 1);
-    return ok;
-}
+//bool chk(){
+//    bool ok = true;
+//    REP(i, m) ok &= (c[i] == 1);
+//    return ok;
+//}
 
 void init() {
 }
@@ -70,46 +70,65 @@ void input() {
 }
 
 void solve() {
-    if(n == 1){
-        double res = 1e20;
-        REP(i, m){
-            chmin(res, (double)cost[i]);
-        }
-        printf("%8lf", res);
-    }
-    else if(chk()){
-        double res = 0.0;
-        REP(i, n){
-            double mn = 1e20;
-            REP(j, m) if(p[j][i] > 0) chmin(mn, cost[j]/p[j][i]);
-            res += mn;
-        }
-        printf("%8lf", res);
-    }
-    else if(n == 2){
-        double min0 = 1e20;
-        double min1 = 1e20;
-        REP(i, m){
-            if(p[i][0] != 0) chmin(min0, cost[i]/p[i][0]);
-            if(p[i][1] != 0) chmin(min1, cost[i]/p[i][1]);
-        }
-        double res = 1e20;
-        REP(i, m){
-            chmin(res, (cost[i]+min1)*p[i][0] + (cost[i]+min0)*p[i][1]);
-        }
-        printf("%8lf", res);
-    }
-    else if(m == 1){
-        double dp[1<<n];
-        REP(i, (1<<n)) dp[i] = 0;
+//    if(n == 1){
+//        double res = 1e20;
+//        REP(i, m){
+//            chmin(res, (double)cost[i]);
+//        }
+//        printf("%8lf", res);
+//    }
+//    else if(chk()){
+//        double res = 0.0;
+//        REP(i, n){
+//            double mn = 1e20;
+//            REP(j, m) if(p[j][i] > 0) chmin(mn, cost[j]/p[j][i]);
+//            res += mn;
+//        }
+//        printf("%8lf", res);
+//    }
+//    else if(n == 2){
+//        double min0 = 1e20;
+//        double min1 = 1e20;
+//        REP(i, m){
+//            if(p[i][0] != 0) chmin(min0, cost[i]/p[i][0]);
+//            if(p[i][1] != 0) chmin(min1, cost[i]/p[i][1]);
+//        }
+//        double res = 1e20;
+//        REP(i, m){
+//            chmin(res, (cost[i]+min1)*p[i][0] + (cost[i]+min0)*p[i][1]);
+//        }
+//        printf("%8lf", res);
+//    }
+//    else if(m == 1){
+//        double dp[1<<n];
+//        REP(i, (1<<n)) dp[i] = 0;
+//        for(int i = (1<<n)-2; i >= 0; i--){
+//            double p_sum = 0;
+//            REP(j, n) if(!((i>>j)&1)) p_sum += p[0][j];
+//            REP(j, n) if(!((i>>j)&1)) dp[i] += dp[i|(1<<j)] * p[0][j]/p_sum ;
+//            dp[i] += cost[0]/p_sum;
+//        }
+//        printf("%8lf", dp[0]);
+//    }
+//    else{
+		double dp[1<<n];
+		dp[(1<<n)-1] = 0;
+        
         for(int i = (1<<n)-2; i >= 0; i--){
-            double p_sum = 0;
-            REP(j, n) if(!((i>>j)&1)) p_sum += p[0][j];
-            REP(j, n) if(!((i>>j)&1)) dp[i] += dp[i|(1<<j)] * p[0][j]/p_sum ;
-            dp[i] += cost[0]/p_sum;
+			dp[i] = 1e20;
+			REP(j, m){
+				double tmp = 0;
+				double p_sum = 0;
+				REP(k, n) if(!((i>>k)&1)) p_sum += p[j][k];
+				if(p_sum == 0) continue;
+				REP(k, n) if(!((i>>k)&1)) tmp += dp[i|(1<<k)] * p[j][k]/p_sum;
+				tmp += cost[j]/p_sum;
+				chmin(dp[i], tmp);
+			}
+			
         }
         printf("%8lf", dp[0]);
-    }
+//	}
     
     cout << endl;
 }

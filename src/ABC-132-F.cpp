@@ -39,49 +39,40 @@ template<class T> void chmax(T &t, T f) { if (t < f) t = f; }
 #define present(c, e) ((c).find((e)) != (c).end())
 #define cpresent(c, e) (find(ALL(c), (e)) != (c).end())
 
-int n, m, s, t;
-VI e[300010];
+LL dp[100][100010];
+LL n, k;
+
+LL nn, cnt[100010];
+
+LL MOD = 1000000007;
 
 void solve() {
-  cin >> n >> m;
-  REP(i, m) {
-    int u, v;
-    cin >> u >> v;
-    u--;
-    v--;
-    e[u*3].push_back(v*3+1);
-    e[u*3+1].push_back(v*3+2);
-    e[u*3+2].push_back(v*3);
-  }
-  cin >> s >> t;
-  s--;
-  t--;
-  s *= 3;
-  t *= 3;
+  cin >> n >> k;
 
-  set<int> vis;
-  vis.insert(s);
-  queue<pair <int, int> > q;
-  q.push({s, 0});
-  while(q.size() > 0) {
-    pair <int, int> node = q.front();
-    q.pop();
-    int v = node.first;
-    int cost = node.second;
-    if (v == t) {
-      cout << cost/3 << endl;
-      return;
+  nn = 0;
+  int ptr = 1;
+  while(1) {
+    nn++;
+    LL start = ptr;
+    if (n/ptr == 1) {
+      cnt[nn-1] = n-ptr+1;
+      break;
     }
-
-    for (auto a: e[v]) {
-      if (vis.count(a) == 0) {
-        q.push({a, cost+1});
-        vis.insert(a);
-      }
-    }
-
+    ptr += (n%ptr) / (n/ptr) + 1;
+    cnt[nn-1] = ptr - start;
   }
-  cout << -1 << endl;
+
+  REP(i, nn) dp[0][i] = 1;
+  REP(i, k-1) {
+    LL sum = 0;
+    REP(j, nn) {
+      sum = (sum + dp[i][j]*cnt[j]) % MOD;
+      dp[i+1][nn-j-1] = (dp[i+1][nn-j-1] + sum) % MOD;
+    }
+  }
+  LL res = 0;
+  REP(i, nn) res = (res + dp[k-1][i]*cnt[i]) % MOD;
+  cout << res << endl;
 
 }
 

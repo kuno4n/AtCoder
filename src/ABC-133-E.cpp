@@ -62,11 +62,11 @@ void solve() {
     int d = depth;
     if (d > 1) d = 1;
     int parent = node.second.second;
-    REP(i, SZ(a[node.first])) if (a[node.first][i] != parent){
+    for(auto p : a[node.first]) if (p != parent){
       d++;
       // OUT2(a[node.first][i], d);
       res = (res * (k-d)) % 1000000007;
-      q.push(make_pair(a[node.first][i], make_pair(depth+1, node.first)));
+      q.push(make_pair(p, make_pair(depth+1, node.first)));
     }
   }
   cout << res << endl;

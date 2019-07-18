@@ -39,39 +39,47 @@ template<class T> void chmax(T &t, T f) { if (t < f) t = f; }
 #define present(c, e) ((c).find((e)) != (c).end())
 #define cpresent(c, e) (find(ALL(c), (e)) != (c).end())
 
-int n, q;
-vector<pair<LL, LL>> imo;
-set<LL> s;
+int n;
+LL s[100010];
 
 void solve() {
-  cin >> n >> q;
-  REP(_, n) {
-    LL s, t, x;
-    cin >> s >> t >> x;
-    s -= x;
-    t -= x;
-    imo.push_back({s, x});
-    imo.push_back({t, -x});
-  }
-  sort(ALL(imo));
-  int i = 0;
-  REP(_, q) {
-    LL d;
-    cin >> d;
-    while(i < SZ(imo) && imo[i].first <= d) {
-      if (imo[i].second > 0) {
-        s.insert(imo[i].second);
-      } else {
-        s.erase(-imo[i].second);
-      }
-      i++;
+  cin >> n;
+  REP(i, n) cin >> s[i];
+  LL res = 0;
+  FOR(c, 1, n-1) {
+    set<int> se;
+    int l = 0, r = n-1;
+    LL sum = 0;
+    while(l+c < n-1) {
+      sum += s[l];
+      sum += s[r];
+      chmax(res, sum);
+      l += c;
+      r -= c;
+      if (se.count(l) > 0) break;
+      se.insert(l);
+      if (se.count(r) > 0) break;
+      se.insert(r);
     }
-    if (SZ(s) > 0) {
-      cout << *s.begin() << endl;
-    } else {
-      cout << -1 << endl;
-    }
+    // if ((n-1)%c == 0) {
+    //   while(l<r) {
+    //     sum += s[l];
+    //     sum += s[r];
+    //     chmax(res, sum);
+    //     l += c;
+    //     r -= c;
+    //   }
+    // } else {
+    //   while(l < n-1) {
+    //     sum += s[l];
+    //     sum += s[r];
+    //     chmax(res, sum);
+    //     l += c;
+    //     r -= c;
+    //   }
+    // }
   }
+  cout << res << endl;
 }
 
 int main() {

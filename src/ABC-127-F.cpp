@@ -1,0 +1,102 @@
+#include <iostream>
+#include <sstream>
+#include <string>
+#include <vector>
+#include <stack>
+#include <queue>
+#include <set>
+#include <map>
+#include <numeric>
+#include <algorithm>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <cctype>
+#include <cmath>
+#include <cassert>
+#include <cstdarg>
+#include <sys/time.h>
+#include <fstream>
+//#include "cout.h"
+
+using namespace std;
+
+#define SZ(x) ((int)x.size())
+#define MSET(x,a) memset(x, a, (int)sizeof(x))
+#define PB push_back
+#define VI vector < int >
+#define PII pair < int, int >
+#define LL long long
+#define FOR(i,a,b) for (int i = (a); i < (b); i++)
+#define REP(i,n) FOR(i,0,n)
+#define ALL(v) (v).begin(), (v).end()
+#define FIT(it,v) for (__typeof((v).begin()) it = (v).begin(); it != (v).end(); it++)
+#define OUT(A) cout << #A << " = "<< (A) << endl
+#define OUT2(A, B) cout << "(" << #A << ", " << #B << ") = (" << (A) << ", "<< (B) << ")" << endl
+template<class T> void chmin(T &t, T f) { if (t > f) t = f; }
+template<class T> void chmax(T &t, T f) { if (t < f) t = f; }
+
+#define present(c, e) ((c).find((e)) != (c).end())
+#define cpresent(c, e) (find(ALL(c), (e)) != (c).end())
+
+priority_queue<LL> _left;
+priority_queue<LL, vector<LL>, greater<LL> > _right;
+
+void solve() {
+  int q;
+  cin >> q;
+
+  LL res = 0;
+  LL mid;
+  REP(i, q) {
+    int k;
+    cin >> k;
+    if (k == 2) {
+      cout << mid << " " << res << endl;
+      continue;
+    }
+
+    LL a, b;
+    cin >> a >> b;
+    res += b;
+    if(i==0) {
+      mid = a;
+      continue;
+    }
+    if(mid <= a) {
+      _right.push(a);
+      res += a-mid;
+    } else {
+      _left.push(a);
+      res += mid-a;
+    }
+    if (SZ(_left)+2 == SZ(_right)) {
+      LL next_mid = _right.top();
+      LL diff = next_mid - mid;
+
+      res -= diff*SZ(_right);
+      _right.pop();
+
+      _left.push(mid);
+      res += diff*SZ(_left);
+
+      mid = next_mid;
+    } else if (SZ(_left) > SZ(_right)) {
+      LL next_mid = _left.top();
+      LL diff = mid - next_mid;
+
+      res -= diff*SZ(_left);
+      _left.pop();
+
+      _right.push(mid);
+      res += diff*SZ(_right);
+
+      mid = next_mid;
+    }
+  }
+}
+
+int main() {
+	solve();
+	return 0;
+}
